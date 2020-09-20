@@ -1,0 +1,36 @@
+%icomoon {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  font-weight: normal;
+  font-style: normal;
+  font-variant: normal;
+  line-height: 1;
+
+  vertical-align: initial;
+  text-transform: none;
+
+  speak: none;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+%clearfix {
+  @include clearfix;
+}
+
+%plainlist {
+  @include plainlist();
+}
+
+%cover {
+  @include cover;
+}
+
+%visuallyhidden {
+  @include visuallyhidden;
+}
+
+%objectfit {
+  @include objectfit();
+}

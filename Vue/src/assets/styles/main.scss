@@ -1,0 +1,283 @@
+/* =======================================================================
+>> Imports
+========================================================================== */
+
+// Normalize Styles
+@import '~normalize.css/normalize';
+
+// Import node_modules styles
+
+// Fonts
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;700;900&display=swap');
+
+// Import Common
+@import 'common/icons';
+@import 'common/mixins';
+@import 'common/variables';
+@import 'common/helpers';
+
+// @import "print";
+
+/* =======================================================================
+>> Global
+========================================================================== */
+
+.clearfix {
+  @extend %clearfix;
+}
+
+.visuallyhidden {
+  @extend %visuallyhidden;
+}
+
+.no-desktop {
+  @include desktop {
+    display: none !important;
+  }
+}
+
+.no-mobile {
+  @include mobile {
+    display: none !important;
+  }
+}
+
+.desktop-only {
+  @include mobile {
+    display: none !important;
+  }
+  @include tablet {
+    display: none !important;
+  }
+}
+
+.handheld-only {
+  @include desktop {
+    display: none !important;
+  }
+}
+
+// Box sizing partial styles:
+// Apply a natural box layout model to all elements
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+@-ms-viewport {
+  width: auto;
+}
+
+html {
+  font-size: 1em;
+  overflow-x: hidden;
+  height: 100%;
+}
+
+body {
+  font-size: 1em; //16px
+  line-height: 1.5;
+
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  @extend %plainlist;
+}
+
+a {
+  text-decoration: none;
+
+  @include transition('color, color, border', 300ms, ease-in-out);
+  -webkit-backface-visibility: initial;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: $bold;
+  line-height: inherit;
+}
+
+h1 {
+  font-size: calc-em(24px);
+}
+
+h2 {
+  font-size: calc-em(20px);
+}
+
+h3 {
+  font-size: calc-em(18px);
+}
+
+img {
+  max-width: 100%;
+
+  vertical-align: initial;
+}
+
+// Styling on warning for users on IE7 or below
+.browsehappy {
+  margin: 0;
+  padding: 0.5em 0;
+
+  text-align: center;
+
+  color: #000;
+  background: #fff8e2;
+}
+
+// Normalise fieldset
+fieldset {
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+}
+
+iframe {
+  border: none;
+}
+
+button {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+
+/* =======================================================================
+>> Layout Configurations
+========================================================================== */
+
+.wrapper {
+  position: relative;
+
+  overflow-x: hidden;
+
+  background: #fff;
+
+  @include transition(transform, 200ms, ease-in-out);
+}
+
+%container {
+  position: relative;
+
+  margin: 0 auto;
+  padding: 0 15px;
+
+  width: 100%;
+}
+
+.container {
+  @extend %container;
+
+  max-width: 980px;
+  padding: 0 30px;
+
+  @include mobile {
+    padding: 0 22px;
+  }
+
+  &--largest {
+    @extend %container;
+    max-width: 1550px;
+
+    @include mobile {
+      padding: 0 22px;
+    }
+  }
+}
+
+#main {
+  min-height: 100%;
+  width: 100%;
+
+  clear: both;
+  overflow-x: hidden;
+
+  position: relative;
+  z-index: 0;
+}
+
+/*========================================================================
+>> Common for all the pages
+========================================================================== */
+
+body {
+  //Default font
+  font-family: $main-font;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  color: $black;
+}
+
+#app {
+  height: 100%;
+}
+
+#main {
+  padding-left: 80px;
+  background-color: $white;
+}
+
+button,
+input,
+select {
+  &:focus {
+    outline: none;
+  }
+}
+
+
+// //Hide page until load completes
+// body {
+//   visibility: hidden;
+
+//   &.loaded {
+//     visibility: visible;
+//   }
+// }
+
+body.freeze-bg,
+html.freeze-bg {
+  overflow: hidden;
+}
+
+body.freeze-bg--scrollable-popup,
+html.freeze-bg--scrollable-popup {
+  overflow: hidden;
+
+  main#main {
+    height: 100vh;
+
+    .container {
+      position: fixed;
+      left: 50%;
+
+      transform: translateX(-50%);
+    }
+  }
+}
+
+// .background-img {
+//   background-image: url("../images/copied-image.png");
+//   background-position: center center;
+//   width: 500px;
+//   height: 500px;
+// }
+
+/*========================================================================
+>> Animations
+========================================================================== */

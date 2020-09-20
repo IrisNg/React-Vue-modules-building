@@ -1,0 +1,320 @@
+@mixin box-shadow($left, $top, $blur, $spread, $color, $inset: "") {
+  -webkit-box-shadow: $left $top $blur $spread $color #{$inset};
+  box-shadow: $left $top $blur $spread $color #{$inset};
+}
+
+@mixin rotate($deg) {
+  transform: rotate($deg);
+}
+
+@mixin vertical-align {
+  position: absolute;
+  top: 50%;
+
+  transform: translateY(calc(-50% - 0.5px));
+
+  -webkit-backface-visibility: hidden;
+}
+
+@mixin plainlist() {
+  margin: 0;
+  padding: 0;
+
+  list-style-type: none;
+}
+
+@mixin screen($opacity, $color) {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  opacity: $opacity;
+  background: $color;
+}
+
+@mixin centering-the-unknown() {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  width: 50%;
+  margin: auto;
+
+  transform: translate(calc(-50% - 0.5px), calc(-50% - 0.5px));
+}
+
+@mixin clearfix() {
+  &:before,
+  &:after {
+    display: table;
+
+    content: "";
+  }
+
+  &:after {
+    clear: both;
+  }
+}
+
+@mixin transition($type, $duration, $easing: linear) {
+  /* Webkit */
+  -webkit-transition-timing-function: $easing;
+  transition-timing-function: $easing;
+  -webkit-transition-duration: $duration;
+  transition-duration: $duration;
+  -webkit-transition-property: unquote($type);
+  transition-property: unquote($type);
+
+  -webkit-backface-visibility: hidden;
+}
+
+@mixin fade-translate($name, $x1, $y1, $x2, $y2) {
+  @keyframes #{$name} {
+    from {
+      opacity: 0;
+      transform: translate($x1, $y1);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate($x2, $y2);
+    }
+  }
+}
+
+@mixin change-background($name, $beforeColor, $afterColor) {
+  @keyframes #{$name} {
+    from {
+      background-color: $beforeColor;
+    }
+    to {
+      background-color: $afterColor;
+    }
+  }
+}
+
+//CSS3 element scale
+@mixin scale($scale: 1, $origin: center) {
+  transform: scale($scale);
+
+  @if ($origin !=center) {
+    @include origin($origin);
+  }
+}
+
+@mixin cover($position1: center, $position2: center) {
+  repeat: no-repeat;
+  position: $position1 $position2;
+  size: cover;
+}
+
+@mixin visuallyhidden() {
+  position: absolute;
+
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+
+  border: 0;
+}
+
+@mixin fadein-on-active($duration, $delay, $ease) {
+  display: none;
+
+  &.active {
+    display: block;
+    opacity: 0;
+  
+    animation: fadein $duration $delay forwards $ease;
+  }
+}
+
+@mixin infinite-rotate360($duration) {
+  transform-origin: 50% 50%;
+  animation: rotate360 $duration linear infinite;
+}
+
+@mixin gradient($color1, $color2, $direction) {
+  background: $color2;
+  repeat: repeat-x;
+
+  @if $direction==vertical {
+    background: -ms-linear-gradient(bottom, $color1 0%, $color2 100%);
+    /* IE10 Consumer Preview */
+    background: -moz-linear-gradient(bottom, $color1 0%, $color2 100%);
+    /* Opera */
+    background: -o-linear-gradient(bottom, $color1 0%, $color2 100%);
+    background: -webkit-gradient(
+      linear,
+      left bottom,
+      left bottom,
+      color-stop(0, $color1),
+      color-stop(1, $color2)
+    );
+    /* Webkit (Safari/Chrome 10) */
+    background: -webkit-linear-gradient(top, $color1 0%, $color2 100%);
+    /* Webkit (Chrome 11+) */
+    background: linear-gradient(to top, $color1 0%, $color2 100%);
+    /* W3C Markup, IE10 Release Preview */
+  } @else if $direction==diagonal {
+    background: -webkit-linear-gradient(left bottom, $color1, $color2);
+    /* For Safari */
+    background: -o-linear-gradient(top right, $color1, $color2);
+    /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(top right, $color1, $color2);
+    /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to top right, $color1, $color2);
+    /* Standard syntax (must be last) */
+  } @else if $direction==horizontal {
+    background: -webkit-linear-gradient(left, $color1, $color2);
+    /* For Safari */
+    background: -o-linear-gradient(right, $color1, $color2);
+    /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, $color1, $color2);
+    /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, $color1, $color2);
+    /* Standard syntax */
+  }
+}
+
+@function calc-em($target, $context: $base-fontsize) {
+  @return $target / $context * 1em;
+}
+
+// Calculate
+@mixin calc-func($property, $expression) {
+  #{$property}: -moz-calc(#{$expression});
+  #{$property}: -webkit-calc(#{$expression});
+  #{$property}: calc(#{$expression});
+}
+
+// https://css-tricks.com/snippets/sass/maintain-aspect-ratio-mixin/
+@mixin aspect-ratio($width, $height) {
+  position: relative;
+
+  &:before {
+    display: block;
+
+    width: 100%;
+    padding-top: percentage($height / $width);
+
+    content: " ";
+  }
+
+  > .content {
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    margin: 0;
+    padding: 0;
+  }
+}
+
+@mixin custom-scrollbar(
+  $width: 5px,
+  $borderRadius: 2.5px,
+  $barColor: rgb(120, 120, 120),
+  $bgColor: rgb(200, 200, 200)
+) {
+  // MOZ
+  scrollbar-color: $barColor $bgColor;
+  scrollbar-width: thin;
+  // IE 11
+  scrollbar-face-color: $barColor;
+  scrollbar-track-color: $bgColor;
+
+  &::-webkit-scrollbar {
+    width: $width;
+    background: $bgColor;
+    border-radius: $borderRadius;
+    cursor: pointer;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $barColor;
+    border-radius: $borderRadius;
+  }
+}
+
+@mixin print {
+  @media print {
+    @content;
+  }
+}
+// Less than or equal to 479px
+@mixin small-mobile {
+  @media (max-width: $bpLgMobile - 1) {
+    @content;
+  }
+}
+// Less than or equal to 767px
+@mixin mobile {
+  @media (max-width: $bpTablet - 1) {
+    @content;
+  }
+}
+// 768 to 1023px
+@mixin tablet {
+  @media (min-width: $bpTablet) and (max-width: $bpDesktop - 1) {
+    @content;
+  }
+}
+
+// Greater than or equal to 1024px
+@mixin desktop {
+  @media (min-width: $bpDesktop) {
+    @content;
+  }
+}
+
+// Greater than or equal to 1280px
+@mixin largedesktop {
+  @media (min-width: $bpLgDesktop) {
+    @content;
+  }
+}
+
+// Greater than or equal to 1440px
+@mixin giantscreen {
+  @media (min-width: $bpGiantScreen) {
+    @content;
+  }
+}
+
+// Greater than or equal to 1680px
+@mixin giantlargescreen {
+  @media (min-width: $bpGiantLgScreen) {
+    @content;
+  }
+}
+
+// Less than or equal to 1023px
+@mixin mobile-tablet {
+  @media (max-width: $bpDesktop - 1) {
+    @content;
+  }
+}
+// Greater than or equal to 768px
+@mixin tablet-desktop {
+  @media (min-width: $bpTablet) {
+    @content;
+  }
+}
+
+// Mixin for Objectfit
+@mixin objectfit() {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  font-family: "object-fit: cover; object-position: center center;";
+}

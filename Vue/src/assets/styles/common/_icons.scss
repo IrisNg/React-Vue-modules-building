@@ -1,0 +1,71 @@
+$fontPath: '../fonts';
+
+@font-face {
+  font-family: 'icomoon';
+  font-weight: normal;
+  font-style: normal;
+
+  src: url($fontPath + '/icomoon.eot');
+  src: url($fontPath + '/icomoon.eot?ywx5lt#iefix')
+      format('embedded-opentype'),
+    url($fontPath + '/icomoon.ttf?ywx5lt') format('truetype'),
+    url($fontPath + '/icomoon.woff?ywx5lt') format('woff'),
+    url($fontPath + '/icomoon.svg?ywx5lt#icomoon') format('svg');
+}
+
+[class^='icon-'],
+[class*=' icon-'] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  font-weight: normal;
+  font-style: normal;
+  font-variant: normal;
+  line-height: 1;
+
+  vertical-align: initial;
+  text-transform: none;
+
+  speak: none;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  &:before {
+    font-family: 'icomoon' !important;
+    font-weight: normal;
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+
+    vertical-align: initial;
+    text-transform: none;
+
+    speak: none;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+
+
+/* =======================================================================
+>> Imported Icomoon Icons
+========================================================================== */
+
+.icon-add:before {
+  content: "\e900";
+}
+.icon-triangle-left:before {
+  content: "\e901";
+}
+.icon-triangle-right:before {
+  content: "\e902";
+}
+.icon-calendar:before {
+  content: "\f073";
+}
+.icon-list-ol:before {
+  content: "\f0cb";
+}
+
