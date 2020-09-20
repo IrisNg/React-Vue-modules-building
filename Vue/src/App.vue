@@ -2,7 +2,8 @@
   <div id="app">
     <nav-bar />
     <div id="main">
-      <router-view />
+      <!-- <router-view /> -->
+      <p>Welcome to Vue!</p>
     </div>
     <!-- <router-link to="/">Home</router-link>-->
       <!-- <img src="./assets/images/parsed-image.png" /> -->

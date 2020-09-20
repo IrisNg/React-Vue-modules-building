@@ -14,6 +14,7 @@ module.exports = merge(common, {
     filename: 'assets/scripts/[name].js',
   },
   devServer: {
+    open: true,
     historyApiFallback: true, //Serve index.html regardless of url
     setup(app) {
       //Redirect POST request to the same url in GET
