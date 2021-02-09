@@ -1,0 +1,10 @@
+.tabs-bar {
+
+  &__tab {
+outline: none;
+
+    &.is-active {
+      border-color: red;
+    }
+  }
+}
