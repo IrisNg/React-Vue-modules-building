@@ -1,6 +1,5 @@
 export default [
   {
-    isActive: true,
     value: 'artemis',
     text: 'Artemis',
     id: 'artemis'

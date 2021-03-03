@@ -1,18 +1,22 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import './App.scss';
 import TabsBar from './TabsBar/TabsBar';
 
-import TabsBarData from './TabsBar/TabsBarData';
+import tabsBarData from './TabsBar/tabsBarData';
 
-function onTabChangeCallback(nextTab) {
-console.log('next tab callback', nextTab)
-}
 
 function App() {
 
+  const [activeTab, setActiveTab] = useState({ ...tabsBarData[0] })
+
   return (
     <div className="App">
-      <TabsBar initialTabs={TabsBarData} onTabChangeCallback={onTabChangeCallback}></TabsBar>
+      <TabsBar
+        tabs={tabsBarData}
+        activeTabId={activeTab.id}
+        onTabChange={(nextActiveTab) => { setActiveTab({ ...nextActiveTab }) }}
+      >
+      </TabsBar>
     </div>
   );
 }
