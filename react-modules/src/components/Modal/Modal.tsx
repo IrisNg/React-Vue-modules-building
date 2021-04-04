@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import cx from 'classnames';
 
 interface ModalButton {
@@ -11,6 +12,8 @@ interface ModalButton {
 }
 
 interface ModalProps {
+  portalNodeId: string;
+  isOpen: boolean;
   contentAlignClass?: 'modal--align-center' | 'modal--align-left' | 'modal--align-right';
   hasTopCloseButton?: boolean;
   topControls?: JSX.Element;
@@ -22,6 +25,8 @@ interface ModalProps {
 
 const Modal: React.FC<ModalProps> = props => {
   const {
+    portalNodeId,
+    isOpen,
     contentAlignClass,
     hasTopCloseButton,
     topControls,
@@ -70,25 +75,33 @@ const Modal: React.FC<ModalProps> = props => {
     }
   }
 
-  return (
-    <div className={ cx("modal", contentAlignClass) } aria-modal="true">
-      <div className="modal__overlay"></div>
-      <div className="modal__container">
-        { renderTopControls() }
-        <div className="modal__content-wrapper">
-          { title && <h2 className={ cx('modal__title', titleClass) }>{ title }</h2> }
-          { description && <p className="modal__description">{ description }</p> }
-          { children && <div className="modal__block">{ children }</div> }
+  if (!isOpen) {
+    return;
+  }
+  return ReactDOM.createPortal(
+    (
+      <div className={ cx("modal", contentAlignClass) } aria-modal="true">
+        <div className="modal__overlay"></div>
+        <div className="modal__container">
+          { renderTopControls() }
+          <div className="modal__content-wrapper">
+            { title && <h2 className={ cx('modal__title', titleClass) }>{ title }</h2> }
+            { description && <p className="modal__description">{ description }</p> }
+            { children && <div className="modal__block">{ children }</div> }
+          </div>
+          { renderButtons() }
         </div>
-        { renderButtons() }
-      </div>
 
-    </div>
-  );
+      </div>
+    ),
+    document.getElementById(portalNodeId)
+  )
 }
 
 
 Modal.defaultProps = {
+  portalNodeId: '#modal-root',
+  isOpen: false,
   contentAlignClass: 'modal--align-left',
   hasTopCloseButton: false,
   topControls: undefined,
