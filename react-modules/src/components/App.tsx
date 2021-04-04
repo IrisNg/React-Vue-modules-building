@@ -3,7 +3,7 @@ import './App.scss';
 import TabsBar from './TabsBar/TabsBar';
 
 import {Tab} from './TabsBar/tab.model'
-import tabsBarData from './TabsBar/tabsBarData';
+import tabsBarData from './TabsBar/tabsBarData.js';
 
 
 const App:React.FC=()=> {
