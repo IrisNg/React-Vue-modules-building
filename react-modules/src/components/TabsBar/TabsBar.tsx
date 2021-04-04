@@ -1,24 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import cx from 'classnames';
 
+import {Tab} from './tab.model';
 import './TabsBar.scss';
 
+interface TabsBarProps {
+  label: string;
+  tabs: Tab[];
+  activeTabId: string;
+  onTabChange: (nextActiveTab: Tab)=>void;
+}
 
-function TabsBar({ label, tabs, activeTabId, onTabChange }) {
+const TabsBar: React.FC<TabsBarProps> = ({ label, tabs, activeTabId, onTabChange })=> {
 
-  function mapTabToJSX(tab) {
+  const mapTabToJSX=(tab: Tab)=> {
     const { id, text, panelId } = tab,
-      isActive = id === activeTabId,
-      className = cx('tabs-bar__tab', { 'is-active': isActive }),
-      ariaSelected = isActive ? 'true' : 'false';
+      isActive:boolean = id === activeTabId,
+      className:string = cx('tabs-bar__tab', { 'is-active': isActive });
 
     return (
       <button
         className={className}
-        onClick={!isActive && onTabChange ? () => { onTabChange(tab) } : null}
+        onClick={!isActive && onTabChange ? () => { onTabChange(tab) } : undefined}
         key={id}
         role="tab"
-        aria-selected={ariaSelected}
+        aria-selected={isActive}
         aria-controls={panelId}
         id={id}
         tab-index="0"
@@ -49,13 +55,6 @@ const [activeTab, setActiveTab] = useState({ ...tabsBarData[0] })
 ></TabsBar>
 */
 
-//Sample tab obj in 'tabs' props array
-//{ 
-//  value: str, 
-//  text: str, 
-//  id: unqiue_id_str, 
-//  [optional]panelId: unqiue_id_str //Id of ele that this tab controls visibility of, useful for sections changed by tabs
-//}
 
 TabsBar.defaultProps = {
   label: '', //Label for tabs bar
