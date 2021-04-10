@@ -27,7 +27,7 @@ const App: React.FC = () => {
   }
 
   const modalProps: ModalProps = {
-    portalNodeId: "modal-root",
+    portalNodeId: "modal-root-2",
     title: 'ghegheh',
     description: 'nananaa',
     buttons: [

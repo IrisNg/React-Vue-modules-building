@@ -8,8 +8,8 @@ export interface ModalButton {
 }
 
 export interface ModalProps {
-  className?: string;
   portalNodeId: string;
+  className?: string;
   contentAlignClass?: 'modal--align-center' | 'modal--align-left' | 'modal--align-right';
   hasTopCloseButton?: boolean;
   topControls?: JSX.Element;
