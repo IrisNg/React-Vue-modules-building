@@ -1,32 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { useEffect, useState } from 'react';
 import cx from 'classnames';
+import { CSSTransition } from 'react-transition-group'
 
-interface ModalButton {
-  mode: 'close' | 'action' | 'other';
-  btnClass?: string;
-  btnType?: 'button' | 'submit' | 'reset';
-  id?: string;
-  text?: string | JSX.Element;
-  btnJSX?: JSX.Element;
-}
+import withPortal from '../../hoc/withPortal'
+import { ModalButton, ModalProps } from './modal.model'
+import './Modal.scss'
 
-interface ModalProps {
-  portalNodeId: string;
-  isOpen: boolean;
-  contentAlignClass?: 'modal--align-center' | 'modal--align-left' | 'modal--align-right';
-  hasTopCloseButton?: boolean;
-  topControls?: JSX.Element;
-  title?: string | JSX.Element;
-  titleClass?: string;
-  description?: string | JSX.Element;
-  buttons?: ModalButton[];
-}
 
 const Modal: React.FC<ModalProps> = props => {
   const {
-    portalNodeId,
-    isOpen,
+    className,
     contentAlignClass,
     hasTopCloseButton,
     topControls,
@@ -34,53 +17,78 @@ const Modal: React.FC<ModalProps> = props => {
     titleClass,
     description,
     children,
-    buttons
+    buttons,
+    onCompletedClose: onCompletedCloseCB,
+    onClosing: onClosingCB,
+    onActionBtnClick: onActionBtnClickCB
   } = props;
+
+  const [isModalOpen, setModalOpenStatus] = useState<boolean>(true);
+
+
+  const closeModal = () => {
+    setModalOpenStatus(false)
+  }
+
+  const onCloseBtnClick = () => {
+    closeModal()
+
+    //Callback to parent
+    if (onClosingCB) onClosingCB()
+  }
+
+  const onExited = () => {
+    //Callback to parent to unmount Modal component
+    onCompletedCloseCB()
+  }
+
+  const onActionBtnClick = () => {
+    if (onActionBtnClickCB) onActionBtnClickCB(closeModal)
+  }
 
   const renderTopControls = (): JSX.Element | void => {
     if (hasTopCloseButton || topControls) {
       return (
         <div className="modal__top-control-wrapper">
-          {hasTopCloseButton && <button className="modal__close-btn" type="button"><i className="icon icon-close"></i></button> }
+          {hasTopCloseButton && <button className="modal__close-btn" onClick={ onCloseBtnClick } type="button"><i className="icon icon-close"></i></button> }
           {topControls }
         </div>
       );
     }
   }
 
-  const renderButtons = (): JSX.Element | void => {
-    if (buttons) {
-      return (
-        <div className="modal__button-wrapper">
-          {buttons.map((button: ModalButton): JSX.Element | '' => {
-            const { mode, btnClass, btnType = "button", id, text, btnJSX = '' } = button,
-              defaultBtn: JSX.Element = (
-                <button
-                  className={ cx('btn modal__btn', { 'modal__close-btn': mode === 'close' }, btnClass) }
-                  type={ btnType }
-                  id={ id }>
-                  { text }
-                </button>
-              );
+  const renderButtons = (): JSX.Element | null => {
+    if (!buttons) return null
 
-            if (mode === 'close' || mode === 'action') {
-              return defaultBtn;
-            }
-            return btnJSX
+    return (
+      <div className="modal__button-wrapper">
+        {buttons.map((button: ModalButton): JSX.Element | '' => {
+          const { mode, btnClass, btnType = "button", id, text, btnJSX = '' } = button,
+            isCloseBtn: boolean = mode === 'close';
 
+          if (mode === 'close' || mode === 'action') {
+            return (<button
+              className={ cx('btn modal__btn', { 'modal__close-btn': isCloseBtn }, btnClass) }
+              type={ btnType }
+              id={ id }
+              key={ id }
+              onClick={ isCloseBtn ? onCloseBtnClick : onActionBtnClick }
+            >
+              { text }
+            </button>);
           }
-          ) }
-        </div>
-      )
-    }
+
+          return btnJSX
+        }
+        ) }
+      </div>
+    )
   }
 
-  if (!isOpen) {
-    return;
-  }
-  return ReactDOM.createPortal(
-    (
-      <div className={ cx("modal", contentAlignClass) } aria-modal="true">
+
+  return (
+    <CSSTransition in={ isModalOpen } classNames="modal-transition" onExited={ onExited } timeout={ 800 } appear unmountOnExit >
+      <div className={ cx("modal", contentAlignClass, className) } aria-modal="true">
         <div className="modal__overlay"></div>
         <div className="modal__container">
           { renderTopControls() }
@@ -91,17 +99,13 @@ const Modal: React.FC<ModalProps> = props => {
           </div>
           { renderButtons() }
         </div>
-
       </div>
-    ),
-    document.getElementById(portalNodeId)
+    </CSSTransition>
   )
 }
 
 
 Modal.defaultProps = {
-  portalNodeId: '#modal-root',
-  isOpen: false,
   contentAlignClass: 'modal--align-left',
   hasTopCloseButton: false,
   topControls: undefined,
@@ -111,4 +115,4 @@ Modal.defaultProps = {
   buttons: undefined
 }
 
-export default Modal;
+export default withPortal(Modal, 'modal-root');
