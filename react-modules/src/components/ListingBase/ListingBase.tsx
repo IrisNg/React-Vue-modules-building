@@ -1,19 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
-import Pagination, { PaginationProps } from '../Pagination/Pagination';
-
-type filtersType = {
-  [key: string]: string | number;
-} & { currentPage?: number; }
-
-interface ListingBaseProps {
-  modulesConfig: {
-    pagination?: PaginationProps;
-  };
-
-  fetchListingAction: (requestParams: filtersType) => { type: string; payload?: any };
-  formatRequest: (filters: filtersType) => filtersType;
-}
+import Pagination from '../Pagination/Pagination';
+import { filtersType, ListingBaseProps } from './listingBase.model';
 
 
 const ListingBase: React.FC<ListingBaseProps> = (props) => {
@@ -31,7 +19,7 @@ const ListingBase: React.FC<ListingBaseProps> = (props) => {
   useEffect(() => {
     const requestParams = formatRequest ? formatRequest(filters) : filters;
 
-    //Refetch
+    //Refetch listing
     fetchListingAction(requestParams);
 
     return () => { }
