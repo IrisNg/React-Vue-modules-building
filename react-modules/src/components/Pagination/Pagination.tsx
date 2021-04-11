@@ -7,7 +7,7 @@ enum PaginationIconClasses {
   FIRST_ICON = 'icon-chevron-left'
 }
 
-interface PaginationProps {
+export interface PaginationProps {
   currentPage: number;
   totalItemsCount?: number;
   itemsPerPage?: number;
