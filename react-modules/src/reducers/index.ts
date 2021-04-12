@@ -5,20 +5,47 @@ interface ActionType {
   payload: any;
 }
 
-interface SomethingAction extends ActionType {
-payload: string;
+
+interface listingResultsAction extends ActionType {
+payload : {
+  totalItemsCount? : number;
+  numberOfPages? : number;
+  items: null | any[];
+}
 }
 
-const somethingReducer = (state = null, action:SomethingAction) => {
+const listingResultsReducer = (state = {}, action: listingResultsAction) => {
+switch (action.type) {
+case 'SET_RESULTS':
+  //Anyway to memoize results based on filters values?
+  return {...action.payload};
+  case 'CLEAR_RESULTS' : 
+  return {}
+  default:
+    return state;
+}
+}
+
+
+interface someListingFiltersAction extends ActionType {
+  payload: {
+    currentPage?: number;
+  }
+}
+
+//If listing contains pagination, do remember to set currentPage:1 
+const someListingFiltersReducer = (state = {currentPage: 1}, action: someListingFiltersAction) => {
   switch (action.type) {
-case 'SOMETHING':
-  return action.payload
+    case 'UPDATE_FILTER':
+      return { ...state, ...action.payload }
     default:
       return state
   }
 }
 
+export interface RootState {someListingFilters: {currentPage:1}; listingResults: {}}
 
 export default combineReducers({
-something:somethingReducer
+  someListingFilters:  someListingFiltersReducer,
+  listingResults: listingResultsReducer
 });
