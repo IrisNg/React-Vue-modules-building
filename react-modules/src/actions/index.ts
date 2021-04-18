@@ -5,9 +5,9 @@ import {filtersType} from '../components/ListingBase/listingBase.model';
 
 export const fetchListing = (requestParams: filtersType = {}) => async (dispatch:Dispatch) =>{
   try {
-    const response = await axios.post('/listing', requestParams);
+    const response = await axios.post('https://run.mocky.io/v3/70cfcc67-caa2-42ab-a734-2a84d29ab339', requestParams);
     if (!response.data.message) {
-       dispatch({ type: 'FETCH_LISTING', payload: response.data });
+       dispatch({ type: 'SET_RESULTS', payload: response.data });
     } else {
        dispatch({type: 'GLOBAL_ERROR', payload: response.data.message});
       }

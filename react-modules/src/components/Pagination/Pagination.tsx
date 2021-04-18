@@ -7,16 +7,19 @@ enum PaginationIconClasses {
   FIRST_ICON = 'icon-chevron-left'
 }
 
-export interface PaginationProps {
-  currentPage: number;
-  totalItemsCount?: number;
+export interface StaticPaginationProps {
   itemsPerPage?: number;
-  numberOfPages?: number;
   hasPrevNextArrows?: boolean;
   hasFirstLastArrows?: boolean;
   isShowDisabledArrows?: boolean;
   hasFirstLastPages?: boolean;
   maxVisiblePageNumbers?: 1 | 3 | 5;
+}
+
+export interface PaginationProps extends StaticPaginationProps {
+  currentPage: number;
+  totalItemsCount?: number;
+  numberOfPages?: number;
   onPageChange: (selectedPageNumber: number) => void;
 }
 

@@ -2,17 +2,36 @@ import React, { useState } from 'react';
 import './App.scss';
 import TabsBar from './TabsBar/TabsBar';
 import Pagination from './Pagination/Pagination'
+import ListingBase from './ListingBase/ListingBase'
+import TableListingContainer from './TableListingContainer/TableListingContainer'
+import TableListingItem from './TableListingItem/TableListingItem'
+import { fetchListing, updateSomeListingFilters } from '../actions'
 
 import { Tab } from './TabsBar/tab.model'
 import tabsBarData from './TabsBar/tabsBarData.js';
-
 
 const App: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<Tab>({ ...tabsBarData[0] })
 
-  const onPaginationPageChange = (selectedPageNumber: number) => {
-    console.log('pg', selectedPageNumber)
+
+  const listingProps = {
+    modulesConfig: {
+      pagination: {
+        hasPrevNextArrows: true,
+        hasFirstLastPages: true,
+        hasFirstLastArrows: true,
+        itemsPerPage: 10
+      }
+    },
+    filtersStoreKey: 'someListingFilters',
+    resultsStoreKey: 'listingResults',
+    updateFiltersAction: updateSomeListingFilters,
+    fetchListingAction: fetchListing,
+    listingContainerConfig: {
+      headers: ['id', 'name', 'title']
+    }
+
   }
   return (
     <div className="App">
@@ -24,7 +43,9 @@ const App: React.FC = () => {
       >
       </TabsBar>
 
-      <Pagination currentPage={ 7 } totalItemsCount={ 120 } itemsPerPage={ 10 } hasPrevNextArrows hasFirstLastArrows hasFirstLastPages onPageChange={ onPaginationPageChange } />
+      <ListingBase { ...listingProps } ListingContainer={ TableListingContainer } ListingItem={TableListingItem}>
+
+      </ListingBase>
     </div>
   );
 }

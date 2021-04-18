@@ -1,4 +1,5 @@
-import { PaginationProps } from '../Pagination/Pagination';
+import {Dispatch} from 'redux';
+import { StaticPaginationProps } from '../Pagination/Pagination';
 
 export type filtersType = {
   [key: string]: string | number;
@@ -6,14 +7,16 @@ export type filtersType = {
 
 export interface ListingBaseProps {
   modulesConfig: {
-    pagination?: PaginationProps;
+    pagination?: StaticPaginationProps;
   };
   filtersStoreKey?: string;
-  updateFiltersAction?: (newFiltersKeyValues: filtersType) => { type: string; payload: filtersType };
+  updateFiltersAction?: (newFiltersKeyValues: filtersType) => {type: string; payload: {[key:string]:any;}};
   formatRequest?: (filters: filtersType) => filtersType;
-  fetchListingAction: (requestParams: filtersType) => { type: string; payload?: any };
+  fetchListingAction: (requestParams: filtersType)=> (dispatch:Dispatch) => Promise<void>;
   resultsStoreKey: string;
   formatResults?: (response: { [key: string]: any }) => { totalItemsCount?: number; numberOfPages?: number; items?: any[] }
   ListingContainer : React.ComponentType;
-  ListItem?:React.ComponentType;
+  listingContainerConfig?: {[key:string]:any};
+  ListingItem?:React.ComponentType<{item:any}>;
 }
+ 

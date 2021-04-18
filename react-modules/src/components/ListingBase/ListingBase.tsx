@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Pagination from '../Pagination/Pagination';
+
 import {
   filtersType,
   ListingBaseProps,
 } from './listingBase.model';
+
 //@ts-ignore
 import { RootState } from '../../reducers/index.ts'
 const ListingBase: React.FC<ListingBaseProps> = (props) => {
   const {
-    modulesConfig,
+    modulesConfig = {},
     filtersStoreKey,
     updateFiltersAction,
     formatRequest,
@@ -17,8 +19,10 @@ const ListingBase: React.FC<ListingBaseProps> = (props) => {
     resultsStoreKey,
     formatResults,
     ListingContainer,
-    ListItem,
+    listingContainerConfig = {},
+    ListingItem,
   } = props;
+
 
   const hasPagination = !!modulesConfig.pagination;
 
@@ -73,14 +77,15 @@ const ListingBase: React.FC<ListingBaseProps> = (props) => {
     }
   };
 
+
   return (
     <div className="listing">
-      <ListingContainer { ...formattedResults }>
-        { ListItem &&
+      <ListingContainer { ...formattedResults } { ...listingContainerConfig }>
+        { ListingItem &&
           formattedResults.items &&
           formattedResults.items.map(
-            (item: { [key: string]: any }) => (
-              <ListItem { ...item } key={ item.id }></ListItem>
+            (item: any) => (
+              <ListingItem item={ item } key={item.id || item}></ListingItem>
             )
           ) }
       </ListingContainer>
@@ -96,5 +101,6 @@ const ListingBase: React.FC<ListingBaseProps> = (props) => {
     </div>
   );
 };
+
 
 export default ListingBase;
