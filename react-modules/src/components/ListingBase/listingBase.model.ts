@@ -2,7 +2,7 @@ import {Dispatch} from 'redux';
 import { StaticPaginationProps } from '../Pagination/Pagination';
 
 export type filtersType = {
-  [key: string]: string | number;
+  [key: string]: string | number | boolean;
 } & { currentPage?: number; }
 
 export interface ListingBaseProps {

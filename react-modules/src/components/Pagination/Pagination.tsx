@@ -101,7 +101,7 @@ const addPrevNextArrows = (pagesArray: pagesArrayType, currentPageNumber: number
 }
 
 //Add skip to last or first page arrow if valid
-const addFirstLastArrows = (pagesArray: pagesArrayType, currentPageNumber:number, lastPageNumber:number) => {
+const addFirstLastArrows = (pagesArray: pagesArrayType, currentPageNumber: number, lastPageNumber: number) => {
   if (currentPageNumber < lastPageNumber) {
     pagesArray = [...pagesArray, 'last-arrow']
   }
@@ -133,97 +133,7 @@ const Pagination: React.FC<PaginationProps> = (props) => {
     currentPageNumber: number = currentPage <= lastPageNumber ? currentPage : lastPageNumber;
 
 
-  //Convert pagesArray to array of HTML tags
-  const convertPageElementsToJSX = (pagesArray: pagesArrayType): JSX.Element[] => {
-
-    return pagesArray.map(element => {
-
-      switch (true) {
-
-        case element === currentPageNumber:
-          return (
-            <li className="pagination__page current" key={ currentPageNumber }>
-              { element.toString() }
-            </li>
-          );
-
-        case typeof element === 'number':
-          return (
-            <li className="pagination__page" key={ element }>
-              <button type="button" onClick={ () => { onPageChange(typeof element === 'number' ? element : parseInt(element, 10)) } }>
-                { element.toString() }
-              </button>
-            </li>
-          );
-
-        case (element === '...-last' || element === '...-start'):
-          return (
-            <li className="pagination__dots" key={ element }>
-              ...
-            </li>
-          );
-
-        case element === 'next-arrow':
-          return (
-            <li className="pagination__next" key="next-arrow">
-              <button type="button" onClick={ () => { onPageChange(currentPageNumber + 1) } }>
-                <i className={ PaginationIconClasses.NEXT_ICON }></i>
-              </button>
-            </li>
-          );
-
-        case element === 'next-arrow-disabled':
-          return (
-            <li className="pagination__next is-disabled" key="next-arrow-disabled">
-              <button type="button" disabled>
-                <i className={ PaginationIconClasses.NEXT_ICON }></i>
-              </button>
-            </li>
-          );
-
-        case element === 'prev-arrow':
-          return (
-            <li className="pagination__prev" key="prev-arrow">
-              <button type="button" onClick={ () => { onPageChange(currentPageNumber - 1) } }>
-                <i className={ PaginationIconClasses.PREV_ICON }></i>
-              </button>
-            </li>
-          );
-
-        case element === 'prev-arrow-disabled':
-          return (
-            <li className="pagination__prev is-disabled" key="prev-arrow-disabled">
-              <button type="button" disabled>
-                <i className={ PaginationIconClasses.PREV_ICON }></i>
-              </button>
-            </li>
-          );
-
-        case element === 'first-arrow':
-          return (
-            <li className="pagination__first-arrow" key="first-arrow">
-              <button type="button" onClick={ () => { onPageChange(1) } }>
-                <i className={ PaginationIconClasses.FIRST_ICON }></i>
-              </button>
-            </li>
-          );
-
-        case element === 'last-arrow':
-          return (
-            <li className="pagination__last-arrow" key="last-arrow">
-              <button type="button" onClick={ () => { onPageChange(lastPageNumber) } }>
-                <i className={ PaginationIconClasses.LAST_ICON }></i>
-              </button>
-            </li>
-          );
-
-        default:
-          return <></>
-      }
-    });
-  }
-
-  const renderPageElements = () => {
+  const getPageElements = (): pagesArrayType => {
 
     //generate array of neighboring page numbers before and after currentPageNumber
     let neighbouringPageNumbers: number[] = generateNeighboringPageNumbers(currentPageNumber, lastPageNumber, maxVisiblePageNumbers),
@@ -235,7 +145,7 @@ const Pagination: React.FC<PaginationProps> = (props) => {
 
     if (hasFirstLastArrows) pagesArray = addFirstLastArrows(pagesArray, currentPageNumber, lastPageNumber)
 
-    return convertPageElementsToJSX(pagesArray)
+    return pagesArray
   }
 
 
@@ -247,7 +157,93 @@ const Pagination: React.FC<PaginationProps> = (props) => {
   return (
     <div className="pagination">
       <ul className="pagination__buttons">
-        { renderPageElements() }
+        {
+          getPageElements().map((element: number | string) => {
+
+            switch (true) {
+
+              case element === currentPageNumber:
+                return (
+                  <li className="pagination__page current" key={ currentPageNumber }>
+                    { element.toString() }
+                  </li>
+                );
+
+              case typeof element === 'number':
+                return (
+                  <li className="pagination__page" key={ element }>
+                    <button type="button" onClick={ () => { onPageChange(typeof element === 'number' ? element : parseInt(element, 10)) } }>
+                      { element.toString() }
+                    </button>
+                  </li>
+                );
+
+              case (element === '...-last' || element === '...-start'):
+                return (
+                  <li className="pagination__dots" key={ element }>
+                    ...
+                  </li>
+                );
+
+              case element === 'next-arrow':
+                return (
+                  <li className="pagination__next" key="next-arrow">
+                    <button type="button" onClick={ () => { onPageChange(currentPageNumber + 1) } }>
+                      <i className={ PaginationIconClasses.NEXT_ICON }></i>
+                    </button>
+                  </li>
+                );
+
+              case element === 'next-arrow-disabled':
+                return (
+                  <li className="pagination__next is-disabled" key="next-arrow-disabled">
+                    <button type="button" disabled>
+                      <i className={ PaginationIconClasses.NEXT_ICON }></i>
+                    </button>
+                  </li>
+                );
+
+              case element === 'prev-arrow':
+                return (
+                  <li className="pagination__prev" key="prev-arrow">
+                    <button type="button" onClick={ () => { onPageChange(currentPageNumber - 1) } }>
+                      <i className={ PaginationIconClasses.PREV_ICON }></i>
+                    </button>
+                  </li>
+                );
+
+              case element === 'prev-arrow-disabled':
+                return (
+                  <li className="pagination__prev is-disabled" key="prev-arrow-disabled">
+                    <button type="button" disabled>
+                      <i className={ PaginationIconClasses.PREV_ICON }></i>
+                    </button>
+                  </li>
+                );
+
+              case element === 'first-arrow':
+                return (
+                  <li className="pagination__first-arrow" key="first-arrow">
+                    <button type="button" onClick={ () => { onPageChange(1) } }>
+                      <i className={ PaginationIconClasses.FIRST_ICON }></i>
+                    </button>
+                  </li>
+                );
+
+              case element === 'last-arrow':
+                return (
+                  <li className="pagination__last-arrow" key="last-arrow">
+                    <button type="button" onClick={ () => { onPageChange(lastPageNumber) } }>
+                      <i className={ PaginationIconClasses.LAST_ICON }></i>
+                    </button>
+                  </li>
+                );
+
+              default:
+                return <></>
+            }
+          })
+        }
       </ul>
     </div>
   )

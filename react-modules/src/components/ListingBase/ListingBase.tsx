@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Pagination from '../Pagination/Pagination';
 
@@ -26,6 +26,8 @@ const ListingBase: React.FC<ListingBaseProps> = (props) => {
 
   const hasPagination = !!modulesConfig.pagination;
 
+  const dispatch = useDispatch();
+  
   const filters = useSelector(
     (state: RootState) => {
       if (filtersStoreKey) {
@@ -43,7 +45,6 @@ const ListingBase: React.FC<ListingBaseProps> = (props) => {
       return {}
     }
   );
-  const dispatch = useDispatch();
 
   useEffect(() => {
 
