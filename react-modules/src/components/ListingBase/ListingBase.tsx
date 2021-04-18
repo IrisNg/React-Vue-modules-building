@@ -37,7 +37,8 @@ const ListingBase: React.FC<ListingBaseProps> = (props) => {
   const results = useSelector(
     (state: RootState) => {
       if (resultsStoreKey) {
-        return state[resultsStoreKey]
+        const results = state[resultsStoreKey];
+        return formatResults ? formatResults(results) : results;
       }
       return {}
     }
@@ -45,12 +46,9 @@ const ListingBase: React.FC<ListingBaseProps> = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const requestParams = formatRequest
-      ? formatRequest({ ...filters })
-      : filters;
 
     //Refetch listing
-    dispatch(fetchListingAction(requestParams));
+    dispatch(fetchListingAction(formatRequest ? formatRequest({ ...filters }) : filters));
 
     return () => { };
   }, [
@@ -60,10 +58,7 @@ const ListingBase: React.FC<ListingBaseProps> = (props) => {
     formatRequest,
   ]);
 
-  const formattedResults = formatResults
-    ? formatResults(results)
-    : results,
-    { totalItemsCount, numberOfPages } = formattedResults;
+  const { totalItemsCount, numberOfPages } = results;
 
   const onPaginationPageChange = (
     selectedPageNumber: number
@@ -80,12 +75,12 @@ const ListingBase: React.FC<ListingBaseProps> = (props) => {
 
   return (
     <div className="listing">
-      <ListingContainer { ...formattedResults } { ...listingContainerConfig }>
+      <ListingContainer { ...results } { ...listingContainerConfig }>
         { ListingItem &&
-          formattedResults.items &&
-          formattedResults.items.map(
+          results.items &&
+          results.items.map(
             (item: any) => (
-              <ListingItem item={ item } key={item.id || item}></ListingItem>
+              <ListingItem item={ item } key={ item.id || item }></ListingItem>
             )
           ) }
       </ListingContainer>
