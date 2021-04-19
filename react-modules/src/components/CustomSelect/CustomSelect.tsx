@@ -4,7 +4,7 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  Input
+  Input,
 } from 'reactstrap'
 
 interface optionType {
@@ -16,11 +16,12 @@ interface optionType {
 interface CustomSelectProps {
   fieldName: string
   options: optionType[]
-  selectedValue: string
-  onOptionClick?: (
-    selectedOption: optionType,
-    prevSelectedValue: string,
-  ) => void
+  fieldValue: string
+  onFieldValueChange?: (data: {
+    nextFieldValue: string
+    prevFieldValue: string
+    fieldName: string
+  }) => void
   placeholderText?: string
   toggleConfig?: { [key: string]: any }
   menuConfig?: { [key: string]: any }
@@ -29,25 +30,31 @@ interface CustomSelectProps {
 const CustomSelect: React.FC<CustomSelectProps> = ({
   fieldName,
   options,
-  selectedValue,
-  onOptionClick,
+  fieldValue,
+  onFieldValueChange,
   placeholderText = '',
   toggleConfig = {},
   menuConfig = {},
 }) => {
   const selectedOption = options.find(
-      (option: optionType) => option.value === selectedValue,
+      (option: optionType) => option.value === fieldValue,
     ),
-    toggleText = selectedOption!.text || placeholderText || 'Select an option'
+    toggleText = selectedOption
+      ? selectedOption.text
+      : null || placeholderText || 'Select an option'
 
   return (
     <div className="custom-select">
-      <Input type="select" value={selectedValue} name={fieldName} readOnly>
+      <Input type="select" value={fieldValue} name={fieldName} readOnly>
         {options &&
           options.map((option) => {
-            const { text, value } = option;
-            
-            return <option value={value} key={value}>{text}</option>
+            const { text, value } = option
+
+            return (
+              <option value={value} key={value}>
+                {text}
+              </option>
+            )
           })}
       </Input>
       <UncontrolledDropdown>
@@ -56,16 +63,20 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
           {options &&
             options.map((option) => {
               const { text, value, config = {} } = option,
-                isSelected = value === selectedValue
+                isSelected = value === fieldValue
               return (
                 <DropdownItem
                   {...config}
                   key={value}
                   active={isSelected}
                   onClick={
-                    onOptionClick
+                    onFieldValueChange
                       ? () => {
-                          onOptionClick({ text, value }, selectedValue)
+                          onFieldValueChange({
+                            nextFieldValue: value,
+                            prevFieldValue: fieldValue,
+                            fieldName,
+                          })
                         }
                       : undefined
                   }

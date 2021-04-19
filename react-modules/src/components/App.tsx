@@ -6,6 +6,7 @@ import ListingBase from './ListingBase/ListingBase'
 import TableListingContainer from './TableListingContainer/TableListingContainer'
 import TableListingItem from './TableListingItem/TableListingItem'
 import { fetchListing, updateSomeListingFilters } from '../actions'
+import ListingFilters from './ListingFilters/ListingFilters'
 import CustomSelect from './CustomSelect/CustomSelect'
 
 import { Tab } from './TabsBar/tab.model'
@@ -13,7 +14,7 @@ import tabsBarData from './TabsBar/tabsBarData.js'
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>({ ...tabsBarData[0] })
-  const [selectedValue, setSelectedValue] = useState<string>('admin')
+  // const [selectedValue, setSelectedValue] = useState<string>('admin')
 
   const listingProps = {
     modulesConfig: {
@@ -33,17 +34,32 @@ const App: React.FC = () => {
     },
   }
 
-  const customSelectProps = {
-    fieldName: 'role',
-    options: [
-      { value: 'admin', text: 'ADMIN' },
-      { value: 'beneficiary', text: 'BENEFICIARY' },
-      { value: 'merchant', text: 'MERCHANT' },
+  // const customSelectProps = {
+  //   onOptionClick: (selectedOption: { value: string; text: string }) => {
+  //     setSelectedValue(selectedOption.value)
+  //   },
+  // }
+
+  const listingFiltersProps = {
+    filtersStoreKey: 'someListingFilters',
+    updateFiltersAction: updateSomeListingFilters,
+    initialValues: { role: 'beneficiary' },
+    Components: [
+      [
+        {
+          Component: CustomSelect,
+          fieldName: 'role',
+          config: {
+            options: [
+              { value: 'admin', text: 'ADMIN' },
+              { value: 'beneficiary', text: 'BENEFICIARY' },
+              { value: 'merchant', text: 'MERCHANT' },
+            ],
+          },
+        },
+      ],
+      [],
     ],
-    selectedValue,
-    onOptionClick: (selectedOption: { value: string; text: string }) => {
-      setSelectedValue(selectedOption.value)
-    },
   }
   return (
     <div className="App">
@@ -55,7 +71,7 @@ const App: React.FC = () => {
           setActiveTab({ ...nextActiveTab })
         }}
       ></TabsBar>
-      <CustomSelect {...customSelectProps}></CustomSelect>
+      <ListingFilters {...listingFiltersProps}></ListingFilters>
       <ListingBase
         {...listingProps}
         ListingContainer={TableListingContainer}
